@@ -9,6 +9,8 @@ const authRoutes = require("./routes/authRoutes");
 const http = require("http");
 const socketio = require("socket.io");
 const authMiddleware = require('./middleware/authMiddleware');
+const dotenv = require("dotenv");
+dotenv.config();
 
 // Create an Express application
 const app = express();
@@ -33,10 +35,8 @@ app.get("/", (req, res) => {
   res.send("Hello, your server is running!");
 });
 
-// MongoDB connection URI
-
 // Connect to MongoDB
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("MongoDB connection established successfully");
     // Initialize GridFS
@@ -50,7 +50,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
     // Create storage engine
     const storage = new GridFsStorage({
-      url: mongoURI,
+      url: process.env.MONGO_URI,
       file: (req, file) => {
         return {
           filename: file.originalname,

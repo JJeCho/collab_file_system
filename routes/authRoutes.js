@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).send('Authentication failed');
     }
-    const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1d' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).send('Authentication error');
